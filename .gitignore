@@ -1,0 +1,29 @@
+# Active-HDL: simuleringsdata
+*.asdb
+*.vcd
+*.wlf
+
+# Active-HDL: kompilerte biblioteker og genererte filer
+*.lib
+*.mgf
+*.adb
+*.bak
+compile/
+log/
+*.log
+
+# AIMSpice: simuleringsresultater
+*.raw
+
+# LaTeX: hjelpefiler
+*.aux
+*.toc
+*.out
+*.synctex.gz
+*.fdb_latexmk
+*.fls
+
+# Windows og macOS
+Thumbs.db
+desktop.ini
+.DS_Store

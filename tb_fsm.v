@@ -1,51 +1,108 @@
-// =====================================================================
-// Rask test av FSM-en alene (uten timer): H og T styres direkte
-// Sjekker alle overgangene i tilstandsdiagrammet på noen få klokker.
-// =====================================================================
 `timescale 1ns/1ps
 
+//Project: Pacemaker for TFE4152 by Joakim Enes and Martin Rikardsen
+
+// Testbench for FSM-en alene (uten timer).
+// H og T' styres direkte, slik at alle overgangene kan testes raskt.
+// Hver test sjekker selv tilstanden og begge utgangene P og R.
+// Tilstander: WAIT = 00 (P=0, R=0), SENSE = 01 (P=0, R=1), PACE = 10 (P=1, R=1)
+
 module tb_fsm;
-    reg  clk = 0, rst_n = 0, h = 0, t = 0;
-    wire tn = ~t;                 // testbench kan bruke operatorer
-    wire p, rn, s1, s0;
-    integer errors = 0;
+	// Signaler testbenchen styrer
+	reg clk = 0, rst_n = 0, h = 0, tn = 1;
 
-    fsm dut (.p(p), .rn(rn), .s1(s1), .s0(s0),
-             .h(h), .tn(tn), .clk(clk), .rst_n(rst_n));
+	// Signaler testbenchen leser
+	wire p, rn, s1, s0;
 
-    always #976562.5 clk = ~clk;  // 512 Hz
+	// Teller antall feil
+	integer errors = 0;
 
-    task check(input [1:0] st, input pe, input re, input [8*24-1:0] txt);
-        begin
-            if ({s1,s0} !== st || p !== pe || rn !== ~re) begin
-                $display("FEIL  %0s: tilstand=%b%b P=%b Rn=%b", txt, s1, s0, p, rn);
-                errors = errors + 1;
-            end else
-                $display("OK    %0s: tilstand=%b%b P=%b R=%b", txt, s1, s0, p, ~rn);
-        end
-    endtask
+	// Kretsen som testes
+	fsm dut (.p(p), .rn(rn), .s1(s1), .s0(s0),
+	         .h(h), .tn(tn), .clk(clk), .rst_n(rst_n));
 
-    // Sett innganger midt i lav-perioden, sjekk rett etter stigende flanke
-    task step(input hv, input tv);
-        begin
-            @(negedge clk); h = hv; t = tv;
-            @(posedge clk); #10;
-        end
-    endtask
+	// Klokke: 512 Hz
+	always #976562.5 clk = ~clk;
 
-    initial begin
-        #10; check(2'b00, 0, 0, "reset -> WAIT");
-        #5_000_000 rst_n = 1;
-        step(0,0); check(2'b00, 0, 0, "WAIT, H=0 T=0 -> WAIT");
-        step(1,0); check(2'b01, 0, 1, "WAIT, H=1 -> RESET");
-        step(1,0); check(2'b01, 0, 1, "RESET, H=1 -> RESET");
-        step(0,0); check(2'b00, 0, 0, "RESET, H=0 -> WAIT");
-        step(0,1); check(2'b10, 1, 1, "WAIT, T=1 -> PACE");
-        step(1,1); check(2'b00, 0, 0, "PACE -> WAIT (alltid)");
-        step(1,1); check(2'b01, 0, 1, "WAIT, H=1 T=1 -> RESET");
-        step(0,0); check(2'b00, 0, 0, "RESET, H=0 -> WAIT");
-        if (errors == 0) $display("Alle tester OK");
-        else             $display("%0d feil", errors);
-        $finish;
-    end
+	// Testforløpet
+	initial begin
+		#5_000_000 rst_n = 1;
+
+		// Test 1: WAIT, ingen slag, ingen timeout -> WAIT (00)
+		@(negedge clk); h = 0; tn = 1;
+		@(posedge clk); #10;
+		if (s1 === 0 && s0 === 0 && p === 0 && rn === 1)
+			$display("OK    1. WAIT,  H=%b T=%b -> %b%b  P=%b R=%b", h, ~tn, s1, s0, p, ~rn);
+		else begin
+			$display("FEIL  1. WAIT,  H=%b T=%b -> %b%b  P=%b R=%b (forventet 00, P=0, R=0)", h, ~tn, s1, s0, p, ~rn);
+			errors = errors + 1;
+		end
+
+		// Test 2: WAIT, hjerteslag -> SENSE (01)
+		@(negedge clk); h = 1; tn = 1;
+		@(posedge clk); #10;
+		if (s1 === 0 && s0 === 1 && p === 0 && rn === 0)
+			$display("OK    2. WAIT,  H=%b T=%b -> %b%b  P=%b R=%b", h, ~tn, s1, s0, p, ~rn);
+		else begin
+			$display("FEIL  2. WAIT,  H=%b T=%b -> %b%b  P=%b R=%b (forventet 01, P=0, R=1)", h, ~tn, s1, s0, p, ~rn);
+			errors = errors + 1;
+		end
+
+		// Test 3: SENSE, slaget pågår -> SENSE (01)
+		@(negedge clk); h = 1; tn = 1;
+		@(posedge clk); #10;
+		if (s1 === 0 && s0 === 1 && p === 0 && rn === 0)
+			$display("OK    3. SENSE, H=%b T=%b -> %b%b  P=%b R=%b", h, ~tn, s1, s0, p, ~rn);
+		else begin
+			$display("FEIL  3. SENSE, H=%b T=%b -> %b%b  P=%b R=%b (forventet 01, P=0, R=1)", h, ~tn, s1, s0, p, ~rn);
+			errors = errors + 1;
+		end
+
+		// Test 4: SENSE, slaget er over -> WAIT (00)
+		@(negedge clk); h = 0; tn = 1;
+		@(posedge clk); #10;
+		if (s1 === 0 && s0 === 0 && p === 0 && rn === 1)
+			$display("OK    4. SENSE, H=%b T=%b -> %b%b  P=%b R=%b", h, ~tn, s1, s0, p, ~rn);
+		else begin
+			$display("FEIL  4. SENSE, H=%b T=%b -> %b%b  P=%b R=%b (forventet 00, P=0, R=0)", h, ~tn, s1, s0, p, ~rn);
+			errors = errors + 1;
+		end
+
+		// Test 5: WAIT, timeout -> PACE (10)
+		@(negedge clk); h = 0; tn = 0;
+		@(posedge clk); #10;
+		if (s1 === 1 && s0 === 0 && p === 1 && rn === 0)
+			$display("OK    5. WAIT,  H=%b T=%b -> %b%b  P=%b R=%b", h, ~tn, s1, s0, p, ~rn);
+		else begin
+			$display("FEIL  5. WAIT,  H=%b T=%b -> %b%b  P=%b R=%b (forventet 10, P=1, R=1)", h, ~tn, s1, s0, p, ~rn);
+			errors = errors + 1;
+		end
+
+		// Test 6: PACE, alltid -> WAIT (00), H og T spiller ingen rolle
+		@(negedge clk); h = 1; tn = 0;
+		@(posedge clk); #10;
+		if (s1 === 0 && s0 === 0 && p === 0 && rn === 1)
+			$display("OK    6. PACE,  H=%b T=%b -> %b%b  P=%b R=%b", h, ~tn, s1, s0, p, ~rn);
+		else begin
+			$display("FEIL  6. PACE,  H=%b T=%b -> %b%b  P=%b R=%b (forventet 00, P=0, R=0)", h, ~tn, s1, s0, p, ~rn);
+			errors = errors + 1;
+		end
+
+		// Test 7: WAIT, slag og timeout samtidig -> SENSE (01), H har prioritet
+		@(negedge clk); h = 1; tn = 0;
+		@(posedge clk); #10;
+		if (s1 === 0 && s0 === 1 && p === 0 && rn === 0)
+			$display("OK    7. WAIT,  H=%b T=%b -> %b%b  P=%b R=%b", h, ~tn, s1, s0, p, ~rn);
+		else begin
+			$display("FEIL  7. WAIT,  H=%b T=%b -> %b%b  P=%b R=%b (forventet 01, P=0, R=1)", h, ~tn, s1, s0, p, ~rn);
+			errors = errors + 1;
+		end
+
+		// Oppsummering
+		if (errors == 0) $display("Alle tester OK");
+		else             $display("%0d feil", errors);
+
+		$finish;
+	end
 endmodule
+

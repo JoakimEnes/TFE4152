@@ -1,0 +1,12 @@
+[aimspice]
+[description]
+124
+* INV
+
+.subckt INV in out vdd
+
+MP1 out in vdd vdd PMOS L=0.18U W=0.36U
+MN1 out in 0 0 NMOS L=0.18U W=0.36U
+
+.ends INV
+[end]

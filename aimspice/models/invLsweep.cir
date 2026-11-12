@@ -1,0 +1,68 @@
+Untitled circuit* TEST 2 L-sveip inverter TT, W = 0.36u
+
+.include p18_cmos_models_tt.inc
+
+* Innganger: 0 V gir NMOS av, 1.8 V gir PMOS av
+VIN0 in0 0 DC 0
+VIN1 in1 0 DC 1.8
+
+* --- Inngang 0 V: NMOS-lekkasje ---
+VDD1 vdd1 0 DC 1.8
+MP1 o1 in0 vdd1 vdd1 PMOS L=0.18U W=0.36U
+MN1 o1 in0 0    0    NMOS L=0.18U W=0.36U
+
+VDD2 vdd2 0 DC 1.8
+MP2 o2 in0 vdd2 vdd2 PMOS L=0.25U W=0.36U
+MN2 o2 in0 0    0    NMOS L=0.25U W=0.36U
+
+VDD3 vdd3 0 DC 1.8
+MP3 o3 in0 vdd3 vdd3 PMOS L=0.36U W=0.36U
+MN3 o3 in0 0    0    NMOS L=0.36U W=0.36U
+
+VDD4 vdd4 0 DC 1.8
+MP4 o4 in0 vdd4 vdd4 PMOS L=0.5U W=0.36U
+MN4 o4 in0 0    0    NMOS L=0.5U W=0.36U
+
+VDD5 vdd5 0 DC 1.8
+MP5 o5 in0 vdd5 vdd5 PMOS L=0.72U W=0.36U
+MN5 o5 in0 0    0    NMOS L=0.72U W=0.36U
+
+VDD6 vdd6 0 DC 1.8
+MP6 o6 in0 vdd6 vdd6 PMOS L=1.0U W=0.36U
+MN6 o6 in0 0    0    NMOS L=1.0U W=0.36U
+
+VDD7 vdd7 0 DC 1.8
+MP7 o7 in0 vdd7 vdd7 PMOS L=1.44U W=0.36U
+MN7 o7 in0 0    0    NMOS L=1.44U W=0.36U
+
+* --- Inngang 1.8 V: PMOS-lekkasje ---
+VDD8 vdd8 0 DC 1.8
+MP8 o8 in1 vdd8 vdd8 PMOS L=0.18U W=0.36U
+MN8 o8 in1 0    0    NMOS L=0.18U W=0.36U
+
+VDD9 vdd9 0 DC 1.8
+MP9 o9 in1 vdd9 vdd9 PMOS L=0.25U W=0.36U
+MN9 o9 in1 0    0    NMOS L=0.25U W=0.36U
+
+VDD10 vdd10 0 DC 1.8
+MP10 o10 in1 vdd10 vdd10 PMOS L=0.36U W=0.36U
+MN10 o10 in1 0     0     NMOS L=0.36U W=0.36U
+
+VDD11 vdd11 0 DC 1.8
+MP11 o11 in1 vdd11 vdd11 PMOS L=0.5U W=0.36U
+MN11 o11 in1 0     0     NMOS L=0.5U W=0.36U
+
+VDD12 vdd12 0 DC 1.8
+MP12 o12 in1 vdd12 vdd12 PMOS L=0.72U W=0.36U
+MN12 o12 in1 0     0     NMOS L=0.72U W=0.36U
+
+VDD13 vdd13 0 DC 1.8
+MP13 o13 in1 vdd13 vdd13 PMOS L=1.0U W=0.36U
+MN13 o13 in1 0     0     NMOS L=1.0U W=0.36U
+
+VDD14 vdd14 0 DC 1.8
+MP14 o14 in1 vdd14 vdd14 PMOS L=1.44U W=0.36U
+MN14 o14 in1 0     0     NMOS L=1.44U W=0.36U
+
+.op
+.end

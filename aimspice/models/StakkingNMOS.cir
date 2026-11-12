@@ -1,0 +1,24 @@
+* Stakk Test for nmos med TT
+.include p18_cmos_models_tt.inc
+
+VIN in 0 DC 0
+
+* A: en NMOS, L = 0.36u
+VDD1 vdd1 0 DC 1.8
+MP1  o1 in vdd1 vdd1 PMOS L=0.36U W=0.36U
+MN1  o1 in 0    0    NMOS L=0.36U W=0.36U
+
+* B: en NMOS, L = 0.72u (samme totale lengde som C)
+VDD2 vdd2 0 DC 1.8
+MP2  o2 in vdd2 vdd2 PMOS L=0.36U W=0.36U
+MN2  o2 in 0    0    NMOS L=0.72U W=0.36U
+
+* C: to NMOS i serie, L = 0.36u hver
+VDD3 vdd3 0 DC 1.8
+MP3  o3  in vdd3 vdd3 PMOS L=0.36U W=0.36U
+MN3a o3  in m3   0    NMOS L=0.36U W=0.36U
+MN3b m3  in 0    0    NMOS L=0.36U W=0.36U
+
+.op
+.end
+

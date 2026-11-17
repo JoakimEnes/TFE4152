@@ -64,5 +64,6 @@ VDD14 vdd14 0 DC 1.8
 MP14 o14 in1 vdd14 vdd14 PMOS L=1.44U W=0.36U
 MN14 o14 in1 0     0     NMOS L=1.44U W=0.36U
 
+.options gmin=1e-15 temp=37
 .op
 .end

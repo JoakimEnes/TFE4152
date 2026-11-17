@@ -1,0 +1,202 @@
+* TEST 2b L-sveip inverter TT, W = 0.36u, 37 C
+.include p18_cmos_models_tt.inc
+
+* Innganger: 0 V gir NMOS av, 1.8 V gir PMOS av
+VIN0 in0 0 DC 0
+VIN1 in1 0 DC 1.8
+
+* --- NMOS-lekkasje (inngang 0 V): i(vddnK) ---
+* L = 0.18u
+VDDN1 vddn1 0 DC 1.8
+MPN1 on1 in0 vddn1 vddn1 PMOS L=0.18U W=0.36U
+MNN1 on1 in0 0 0 NMOS L=0.18U W=0.36U
+
+* L = 0.2u
+VDDN2 vddn2 0 DC 1.8
+MPN2 on2 in0 vddn2 vddn2 PMOS L=0.2U W=0.36U
+MNN2 on2 in0 0 0 NMOS L=0.2U W=0.36U
+
+* L = 0.22u
+VDDN3 vddn3 0 DC 1.8
+MPN3 on3 in0 vddn3 vddn3 PMOS L=0.22U W=0.36U
+MNN3 on3 in0 0 0 NMOS L=0.22U W=0.36U
+
+* L = 0.25u
+VDDN4 vddn4 0 DC 1.8
+MPN4 on4 in0 vddn4 vddn4 PMOS L=0.25U W=0.36U
+MNN4 on4 in0 0 0 NMOS L=0.25U W=0.36U
+
+* L = 0.28u
+VDDN5 vddn5 0 DC 1.8
+MPN5 on5 in0 vddn5 vddn5 PMOS L=0.28U W=0.36U
+MNN5 on5 in0 0 0 NMOS L=0.28U W=0.36U
+
+* L = 0.32u
+VDDN6 vddn6 0 DC 1.8
+MPN6 on6 in0 vddn6 vddn6 PMOS L=0.32U W=0.36U
+MNN6 on6 in0 0 0 NMOS L=0.32U W=0.36U
+
+* L = 0.36u
+VDDN7 vddn7 0 DC 1.8
+MPN7 on7 in0 vddn7 vddn7 PMOS L=0.36U W=0.36U
+MNN7 on7 in0 0 0 NMOS L=0.36U W=0.36U
+
+* L = 0.4u
+VDDN8 vddn8 0 DC 1.8
+MPN8 on8 in0 vddn8 vddn8 PMOS L=0.4U W=0.36U
+MNN8 on8 in0 0 0 NMOS L=0.4U W=0.36U
+
+* L = 0.45u
+VDDN9 vddn9 0 DC 1.8
+MPN9 on9 in0 vddn9 vddn9 PMOS L=0.45U W=0.36U
+MNN9 on9 in0 0 0 NMOS L=0.45U W=0.36U
+
+* L = 0.5u
+VDDN10 vddn10 0 DC 1.8
+MPN10 on10 in0 vddn10 vddn10 PMOS L=0.5U W=0.36U
+MNN10 on10 in0 0 0 NMOS L=0.5U W=0.36U
+
+* L = 0.6u
+VDDN11 vddn11 0 DC 1.8
+MPN11 on11 in0 vddn11 vddn11 PMOS L=0.6U W=0.36U
+MNN11 on11 in0 0 0 NMOS L=0.6U W=0.36U
+
+* L = 0.72u
+VDDN12 vddn12 0 DC 1.8
+MPN12 on12 in0 vddn12 vddn12 PMOS L=0.72U W=0.36U
+MNN12 on12 in0 0 0 NMOS L=0.72U W=0.36U
+
+* L = 0.86u
+VDDN13 vddn13 0 DC 1.8
+MPN13 on13 in0 vddn13 vddn13 PMOS L=0.86U W=0.36U
+MNN13 on13 in0 0 0 NMOS L=0.86U W=0.36U
+
+* L = 1.0u
+VDDN14 vddn14 0 DC 1.8
+MPN14 on14 in0 vddn14 vddn14 PMOS L=1.0U W=0.36U
+MNN14 on14 in0 0 0 NMOS L=1.0U W=0.36U
+
+* L = 1.2u
+VDDN15 vddn15 0 DC 1.8
+MPN15 on15 in0 vddn15 vddn15 PMOS L=1.2U W=0.36U
+MNN15 on15 in0 0 0 NMOS L=1.2U W=0.36U
+
+* L = 1.44u
+VDDN16 vddn16 0 DC 1.8
+MPN16 on16 in0 vddn16 vddn16 PMOS L=1.44U W=0.36U
+MNN16 on16 in0 0 0 NMOS L=1.44U W=0.36U
+
+* L = 2.0u
+VDDN17 vddn17 0 DC 1.8
+MPN17 on17 in0 vddn17 vddn17 PMOS L=2.0U W=0.36U
+MNN17 on17 in0 0 0 NMOS L=2.0U W=0.36U
+
+* L = 3.0u
+VDDN18 vddn18 0 DC 1.8
+MPN18 on18 in0 vddn18 vddn18 PMOS L=3.0U W=0.36U
+MNN18 on18 in0 0 0 NMOS L=3.0U W=0.36U
+
+* L = 4.0u
+VDDN19 vddn19 0 DC 1.8
+MPN19 on19 in0 vddn19 vddn19 PMOS L=4.0U W=0.36U
+MNN19 on19 in0 0 0 NMOS L=4.0U W=0.36U
+
+* --- PMOS-lekkasje (inngang 1.8 V): i(vddpK) ---
+* L = 0.18u
+VDDP1 vddp1 0 DC 1.8
+MPP1 op1 in1 vddp1 vddp1 PMOS L=0.18U W=0.36U
+MNP1 op1 in1 0 0 NMOS L=0.18U W=0.36U
+
+* L = 0.2u
+VDDP2 vddp2 0 DC 1.8
+MPP2 op2 in1 vddp2 vddp2 PMOS L=0.2U W=0.36U
+MNP2 op2 in1 0 0 NMOS L=0.2U W=0.36U
+
+* L = 0.22u
+VDDP3 vddp3 0 DC 1.8
+MPP3 op3 in1 vddp3 vddp3 PMOS L=0.22U W=0.36U
+MNP3 op3 in1 0 0 NMOS L=0.22U W=0.36U
+
+* L = 0.25u
+VDDP4 vddp4 0 DC 1.8
+MPP4 op4 in1 vddp4 vddp4 PMOS L=0.25U W=0.36U
+MNP4 op4 in1 0 0 NMOS L=0.25U W=0.36U
+
+* L = 0.28u
+VDDP5 vddp5 0 DC 1.8
+MPP5 op5 in1 vddp5 vddp5 PMOS L=0.28U W=0.36U
+MNP5 op5 in1 0 0 NMOS L=0.28U W=0.36U
+
+* L = 0.32u
+VDDP6 vddp6 0 DC 1.8
+MPP6 op6 in1 vddp6 vddp6 PMOS L=0.32U W=0.36U
+MNP6 op6 in1 0 0 NMOS L=0.32U W=0.36U
+
+* L = 0.36u
+VDDP7 vddp7 0 DC 1.8
+MPP7 op7 in1 vddp7 vddp7 PMOS L=0.36U W=0.36U
+MNP7 op7 in1 0 0 NMOS L=0.36U W=0.36U
+
+* L = 0.4u
+VDDP8 vddp8 0 DC 1.8
+MPP8 op8 in1 vddp8 vddp8 PMOS L=0.4U W=0.36U
+MNP8 op8 in1 0 0 NMOS L=0.4U W=0.36U
+
+* L = 0.45u
+VDDP9 vddp9 0 DC 1.8
+MPP9 op9 in1 vddp9 vddp9 PMOS L=0.45U W=0.36U
+MNP9 op9 in1 0 0 NMOS L=0.45U W=0.36U
+
+* L = 0.5u
+VDDP10 vddp10 0 DC 1.8
+MPP10 op10 in1 vddp10 vddp10 PMOS L=0.5U W=0.36U
+MNP10 op10 in1 0 0 NMOS L=0.5U W=0.36U
+
+* L = 0.6u
+VDDP11 vddp11 0 DC 1.8
+MPP11 op11 in1 vddp11 vddp11 PMOS L=0.6U W=0.36U
+MNP11 op11 in1 0 0 NMOS L=0.6U W=0.36U
+
+* L = 0.72u
+VDDP12 vddp12 0 DC 1.8
+MPP12 op12 in1 vddp12 vddp12 PMOS L=0.72U W=0.36U
+MNP12 op12 in1 0 0 NMOS L=0.72U W=0.36U
+
+* L = 0.86u
+VDDP13 vddp13 0 DC 1.8
+MPP13 op13 in1 vddp13 vddp13 PMOS L=0.86U W=0.36U
+MNP13 op13 in1 0 0 NMOS L=0.86U W=0.36U
+
+* L = 1.0u
+VDDP14 vddp14 0 DC 1.8
+MPP14 op14 in1 vddp14 vddp14 PMOS L=1.0U W=0.36U
+MNP14 op14 in1 0 0 NMOS L=1.0U W=0.36U
+
+* L = 1.2u
+VDDP15 vddp15 0 DC 1.8
+MPP15 op15 in1 vddp15 vddp15 PMOS L=1.2U W=0.36U
+MNP15 op15 in1 0 0 NMOS L=1.2U W=0.36U
+
+* L = 1.44u
+VDDP16 vddp16 0 DC 1.8
+MPP16 op16 in1 vddp16 vddp16 PMOS L=1.44U W=0.36U
+MNP16 op16 in1 0 0 NMOS L=1.44U W=0.36U
+
+* L = 2.0u
+VDDP17 vddp17 0 DC 1.8
+MPP17 op17 in1 vddp17 vddp17 PMOS L=2.0U W=0.36U
+MNP17 op17 in1 0 0 NMOS L=2.0U W=0.36U
+
+* L = 3.0u
+VDDP18 vddp18 0 DC 1.8
+MPP18 op18 in1 vddp18 vddp18 PMOS L=3.0U W=0.36U
+MNP18 op18 in1 0 0 NMOS L=3.0U W=0.36U
+
+* L = 4.0u
+VDDP19 vddp19 0 DC 1.8
+MPP19 op19 in1 vddp19 vddp19 PMOS L=4.0U W=0.36U
+MNP19 op19 in1 0 0 NMOS L=4.0U W=0.36U
+
+.options gmin=1e-15 temp=37
+.op
+.end

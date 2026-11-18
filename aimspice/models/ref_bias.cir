@@ -1,19 +1,19 @@
-* TEST F2 Referanse (115 mV) og biasstroem (ca. 1 uA), TT, 37 C
+* Reference voltage and bias test at TT for 37 C
 .include p18_cmos_models_tt.inc
 
 VDD vdd 0 DC 1.8
 
-* --- Referanse: spenningsdeler, Vref = 1.8 * R2/(R1+R2) = 115 mV ---
+* Reference Vref = VDD * R2/(R1+R2) = 115 mV
 R1 vdd vref 1.465MEG
 R2 vref 0   100k
 
-* --- Bias: diodekoblet PMOS + motstand, I = (VDD - VSG)/RB ---
-MPB  pb pb vdd vdd PMOS L=1U W=1U
-RB   pb 0  1.2MEG
+* Bias M5 and RB
+M5 vb vb vdd vdd PMOS L=1U W=1U
+RB vb 0  1.2MEG
 
-* --- Speil: kopierer strommen til halen i differensialparet ---
-* (her med en testlast til jord for aa maale strommen)
-MPT  tail pb vdd vdd PMOS L=1U W=1U
+* Mirror M6 carries the same bias current
+* VMEAS replaces the differential amplifier in this test
+M6 tail vb vdd vdd PMOS L=1U W=1U
 VMEAS tail 0 DC 0.6
 
 .options temp=37

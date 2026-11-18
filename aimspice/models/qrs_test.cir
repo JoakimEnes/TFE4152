@@ -1,0 +1,11 @@
+* TEST F1 QRS-signal (PWL), 60 slag/min
+* Grunnlinje 70 mV, R-topp 160 mV, stige- og falltid 20 ms
+* Slag ved 0.5 s, 1.5 s og 2.5 s
+
+VQRS qrs 0 PWL(0 0.07 0.5 0.07 0.52 0.16 0.54 0.07 1.5 0.07 1.52 0.16 1.54 0.07 2.5 0.07 2.52 0.16 2.54 0.07 3 0.07)
+
+* Last for at noden skal vaere koblet (pavirker ikke signalet)
+RL qrs 0 1MEG
+
+.tran 0.1m 3
+.end

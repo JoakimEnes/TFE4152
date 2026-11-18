@@ -1,0 +1,39 @@
+* TEST F3 Komparator (tostegs op-amp, CJM) + inverter, DC-sveip, TT, 37 C
+.include p18_cmos_models_tt.inc
+
+* --- Den ene uavhengige kilden for front-enden ---
+VDD vdd 0 DC 1.8
+
+* --- Testinngang (QRS), sveipes fra 0 til 300 mV ---
+VQRS qrs 0 DC 0.115
+
+* --- Referanse: spenningsdeler, 115 mV ---
+R1 vdd vref 1.465MEG
+R2 vref 0   100k
+
+* --- Bias: diodekoblet PMOS + motstand, ca. 1 uA ---
+M8  pb pb vdd vdd PMOS L=1U W=1U
+RB  pb 0  1.2MEG
+
+* --- Trinn 1: differensialpar med PMOS-inngang og NMOS-speil som last ---
+* M5: halestroem (speiler M8)
+M5  tail pb   vdd  vdd PMOS L=1U W=1U
+* M1: QRS-inngang, M2: referanse
+M1  d1   qrs  tail vdd PMOS L=1U W=4U
+M2  out1 vref tail vdd PMOS L=1U W=4U
+* M3: diodekoblet last, M4: speil
+M3  d1   d1   0    0   NMOS L=1U W=1U
+M4  out1 d1   0    0   NMOS L=1U W=1U
+
+* --- Trinn 2: common-source NMOS med PMOS-stroemkilde som last ---
+* M6 har dobbel W/L av M3/M4, siden den faar dobbel stroem (ingen systematisk offset)
+M6  out2 out1 0    0   NMOS L=1U W=2U
+M7  out2 pb   vdd  vdd PMOS L=1U W=1U
+
+* --- Utgang: inverter (samme dimensjoner som i den digitale delen) ---
+MPI h    out2 vdd  vdd PMOS L=0.36U W=0.36U
+MNI h    out2 0    0   NMOS L=0.36U W=0.36U
+
+.options temp=37
+.dc VQRS 0 0.3 0.5m
+.end

@@ -1,0 +1,66 @@
+* ===== Pacing output: WCM level shifter + output driver =====
+*.include p18_cmos_models_tt.inc
+*.include p18_cmos_models_ss.inc
+.include p18_cmos_models_ff.inc
+.option itl1=10000 gmin=1e-15 abstol=1e-18 vntol=1e-9 temp=37
+
+.param vddl_v=0.15
+.param vddh_v=1.5
+.param T=1.953125m
+.param lmin=0.18u
+
+* ------------------------------------------------------------
+* INV1 (red): inverter in the LOW domain, makes pn = P'
+.subckt inv_l vddl p pn
+MPL  pn  p  vddl vddl PMOS  W=0.36u L={lmin} AD=0.162p AS=0.162p PD=1.26u PS=1.26u
+MNL  pn  p  0    0    NMOS  W=0.36u L={lmin} AD=0.162p AS=0.162p PD=1.26u PS=1.26u
+.ends inv_l
+
+* ------------------------------------------------------------
+* WCMLS (blue): Wilson current mirror level shifter, p (VDDL) -> vy (VDDH)
+.subckt wcmls vddl vddh p vy
+VT   vddh vt 0
+XINV1 vddl p pn inv_l
+*    D   G    S    B
+MP1  vm  vm   vt   vt   PMOS  W=0.36u L={lmin} AD=0.162p AS=0.162p PD=1.26u PS=1.26u
+MP2  vy  vm   vt   vt   PMOS  W=0.36u L={lmin} AD=0.162p AS=0.162p PD=1.26u PS=1.26u
+MP3  vx  vy   vm   vt   PMOS  W=0.36u L={lmin} AD=0.162p AS=0.162p PD=1.26u PS=1.26u
+MN1  vx  p    0    0    NMOS  W=1.44u L={lmin} AD=0.648p AS=0.648p PD=2.34u PS=2.34u
+MN2  vy  pn   0    0    NMOS  W=1.44u L={lmin} AD=0.648p AS=0.648p PD=2.34u PS=2.34u
+.ends wcmls
+
+* ------------------------------------------------------------
+* INV2 (green, buffer) + INV3 (pink, output driver) in the HIGH domain
+* vy = P, INV2 inverts to vz, INV3 inverts again -> pout = P
+.subckt outdrv vddh vy pout
+VT   vddh vt 0
+MPA  vz   vy  vt  vt  PMOS  W=1.44u L={lmin} AD=0.648p AS=0.648p PD=2.34u PS=2.34u
+MNA  vz   vy  0   0   NMOS  W=0.36u L={lmin} AD=0.162p AS=0.162p PD=1.26u PS=1.26u
+MPB  pout vz  vt  vt  PMOS  W=40u   L={lmin} AD=18p    AS=18p    PD=40.9u PS=40.9u
+MNB  pout vz  0   0   NMOS  W=0.36u L={lmin} AD=0.162p AS=0.162p PD=1.26u PS=1.26u
+.ends outdrv
+
+* ------------------------------------------------------------
+* Complete pacing output: P (from FSM, VDDL levels) -> pout
+.subckt pace_out vddl vddh p pout
+XLS   vddl vddh p vy  wcmls
+XDRV  vddh vy pout    outdrv
+.ends pace_out
+
+* ===================== Test bench ===========================
+VDDL  vddl 0 dc {vddl_v}
+VDDH  vddh 0 dc {vddh_v}
+* P: one pacing pulse, one clock period long, starting at 1 ms
+VP    p    0 PWL(0 0  1m 0  {1m+10u} {vddl_v}  {1m+T} {vddl_v}  {1m+T+10u} 0)
+
+XPACE vddl vddh p pout pace_out
+RLOAD pout 0   500
+
+.tran 1u 5m
+.plot tran v(p) v(pout)
+.extract tran label=Vout max(v(pout),1.5m,2.5m)
+.extract tran label=tup xup(v(pout),0.5,0,5m,1)
+.extract tran label=tdown xdown(v(pout),0.5,0,5m,1)
+.extract tran label=Ipulse average(i(vddh),1.5m,2.5m)
+.extract tran label=Ileak average(i(vddh),4m,5m)
+.end

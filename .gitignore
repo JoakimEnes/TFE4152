@@ -18,7 +18,6 @@ log/
 # LaTeX: hjelpefiler
 *.aux
 *.toc
-*.out
 *.synctex.gz
 *.fdb_latexmk
 *.fls

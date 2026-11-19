@@ -27,6 +27,11 @@ module tb_pacemaker;
 
 	// Kretsen som testes
 	pacemaker dut (.H(H), .clk(clk), .rst_n(rst_n), .P(P));
+	
+	initial begin
+	    $dumpfile("tb_pacemaker.vcd");
+	    $dumpvars(1, tb_pacemaker);   // bare signalene på toppnivå i testbenken
+	end
 
 	// Klokke: 512 Hz
 	always #976562.5 clk = ~clk;
@@ -61,12 +66,12 @@ module tb_pacemaker;
 
 	// Ett hjerteslag: H høy i 40 ms
 	task beat;
-		begin
-			H = 1;
-			#40_000_000;
-			H = 0;
-			last_beat = $realtime;
-		end
+	    begin
+	        H = 1;
+	        #20_000_000;      // 20 ms, som front-enden gir
+	        H = 0;
+	        last_beat = $realtime;
+	    end
 	endtask
 
 	// Testforløpet
@@ -74,9 +79,9 @@ module tb_pacemaker;
 		#5_000_000 rst_n = 1;		// slipp reset etter 5 ms
 
 		// Del 1: normal puls, ett slag i sekundet
-		#495_000_000 beat;		// slag ved 0.5 s
-		#960_000_000 beat;		// slag ved 1.5 s
-		#960_000_000 beat;		// slag ved 2.5 s
+		#495_000_000 beat;   // slag ved 0.5 s
+		#980_000_000 beat;   // slag ved 1.5 s
+		#980_000_000 beat;   // slag ved 2.5 s
 
 		if (paces == 0)
 			$display("OK    ingen pacing ved normal puls");

@@ -20,7 +20,12 @@ module tb_fsm;
 	// Kretsen som testes
 	fsm dut (.p(p), .rn(rn), .s1(s1), .s0(s0),
 	         .h(h), .tn(tn), .clk(clk), .rst_n(rst_n));
-
+	
+	initial begin
+	    $dumpfile("tb_fsm.vcd");
+	    $dumpvars(1, tb_fsm);
+	end		 
+			 
 	// Klokke: 512 Hz
 	always #976562.5 clk = ~clk;
 

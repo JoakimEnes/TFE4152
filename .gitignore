@@ -1,6 +1,5 @@
 # Active-HDL: simuleringsdata
 *.asdb
-*.vcd
 *.wlf
 
 # Active-HDL: kompilerte biblioteker og genererte filer

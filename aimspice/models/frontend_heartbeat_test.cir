@@ -1,0 +1,53 @@
+*frontend dc with heatbeat 
+.include p18_cmos_models_tt.inc
+
+VDD vdd 0 DC 1.8
+* Test input: simplified QRS, beats at 0.5, 1.5 and 2.5 s
+VQRS qrs 0 PWL(0 0.07 0.5 0.07 0.52 0.16 0.54 0.07 1.5 0.07 1.52 0.16 1.54 0.07 2.5 0.07 2.52 0.16 2.54 0.07 3 0.07)
+VDDDIG vdddig 0 DC 0.15
+
+*vref = 115 mV with divider (red)
+R1 vdd vref 1.465MEG
+R2 vref 0 100k
+
+*bias with M5 and RB (blue)
+
+M5 vb vb vdd vdd PMOS L=1U W=1U
+RB vb 0 1.2MEG
+
+*tail current coming from M6 (blue)
+M6 tail vb vdd vdd PMOS L=1U W=1U
+
+*Differential amplifier: (pink)
+
+M1 vd qrs tail vdd PMOS L=1U W=4U
+M3 vd vd 0 0 NMOS L=1U W=1U
+
+M2 out1 vref tail vdd PMOS L=1U W=4U
+M4 out1 vd 0 0 NMOS L=1U W=1U
+
+*common source - (green)
+M7 out2 vb vdd vdd PMOS L=1U W=1U
+M8 out2 out1 0 0 NMOS L=1U W=2U
+
+*inverter with output H (orange)
+MP1 h out2 vdddig vdddig PMOS L=0.36U W=0.36U
+MN1 h out2 0 0 NMOS L=0.36U W=0.36U
+
+
+.options temp=37
+.tran 0.1m 3 0 0.1m
+.tran 0.1m 3 0 0.1m
+.plot tran v(qrs) v(h)
+* Time when H rises and falls for each beat (VDD,dig/2 = 0.075 V)
+.extract tran label=Hup1   xup(v(h),0.075,0,3,1)
+.extract tran label=Hdown1 xdown(v(h),0.075,0,3,1)
+.extract tran label=Hup2   xup(v(h),0.075,0,3,2)
+.extract tran label=Hdown2 xdown(v(h),0.075,0,3,2)
+.extract tran label=Hup3   xup(v(h),0.075,0,3,3)
+.extract tran label=Hdown3 xdown(v(h),0.075,0,3,3)
+* Average supply current at the baseline
+.extract tran label=IDD average(i(vdd),0.1,0.4)
+.end
+
+

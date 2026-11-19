@@ -1,0 +1,46 @@
+*frontend dc 
+.include p18_cmos_models_tt.inc
+
+VDD vdd 0 DC 1.8
+VQRS qrs 0 DC 0.115
+VDDDIG vdddig 0 DC 0.15
+
+*vref = 115 mV with divider (red)
+R1 vdd vref 1.465MEG
+R2 vref 0 100k
+
+*bias with M5 and RB (blue)
+
+M5 vb vb vdd vdd PMOS L=1U W=1U
+RB vb 0 1.2MEG
+
+*tail current coming from M6 (blue)
+M6 tail vb vdd vdd PMOS L=1U W=1U
+
+*Differential amplifier: (pink)
+
+M1 vd qrs tail vdd PMOS L=1U W=4U
+M3 vd vd 0 0 NMOS L=1U W=1U
+
+M2 out1 vref tail vdd PMOS L=1U W=4U
+M4 out1 vd 0 0 NMOS L=1U W=1U
+
+*common source - (green)
+M7 out2 vb vdd vdd PMOS L=1U W=1U
+M8 out2 out1 0 0 NMOS L=1U W=2U
+
+*inverter with output H (orange)
+MP1 h out2 vdddig vdddig PMOS L=0.36U W=0.36U
+MN1 h out2 0 0 NMOS L=0.36U W=0.36U
+
+.options temp=37
+.dc VQRS 0.1151 0.1154 0.001m
+.plot dc v(out2) v(h)
+* Threshold: H crosses VDD,dig/2
+.extract dc label=Vth  xup(v(h),0.075)
+* Input where H passes the logic-0 and logic-1 limits
+.extract dc label=VinL xup(v(h),0.0375)
+.extract dc label=VinH xup(v(h),0.1125)
+.end
+
+

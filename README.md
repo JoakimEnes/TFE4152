@@ -1,1 +1,1 @@
-Halla, velkommen til IC prosjektet til meg (Joakim Enes) og Martin
+Halla, velkommen til IC prosjektet til meg (Joakim Enes) og Martin Rikardsen
